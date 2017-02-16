@@ -1,1 +1,2 @@
-worker: stream_process_tweets.py
+clock: python clock.py
+worker: python worker.py

@@ -82,7 +82,6 @@ def tweets_to_df(tweets_list):
 	columns = ["text", "id_str", "screen_name", "statuses_count", "followers_count", "favourites_count", "friends_count"]))
 
 
-
 if __name__ == '__main__':
 
 	trends = get_US_Twitter_trends()
