@@ -1,0 +1,13 @@
+boto==2.45.0
+boto3==1.4.3
+botocore==1.4.93
+Django==1.10.4
+Flask==0.12
+gunicorn==19.1.0
+Jinja2==2.8
+pandas==0.19.2
+python-dotenv==0.6.1
+s3transfer==0.1.10
+tweepy==3.5.0
+ujson==1.35
+yweather==0.1.1
