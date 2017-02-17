@@ -81,6 +81,31 @@ def tweets_to_df(tweets_list):
 	item["user"]["followers_count"], item["user"]["favourites_count"], item["user"]["friends_count"]] for item in tweets_list], 
 	columns = ["text", "id_str", "screen_name", "statuses_count", "followers_count", "favourites_count", "friends_count"]))
 
+# class StdOutListener(StreamListener):
+
+#     def on_data(self, data):
+#         print(data)
+#         return True
+
+#     def on_error(self, status):
+#         print(status)
+
+# if __name__ == '__main__':
+
+#     trends = get_US_Twitter_trends()
+#     trends_list = [item["name"] for item in trends[0]["trends"]]
+
+#     l = StdOutListener()
+#     consumer_key = os.environ.get("TW_CONSUMER")
+#     consumer_secret = os.environ.get("TW_CONSUMER_SECRET")
+#     access_token = os.environ.get("TW_ACCESS")
+#     access_token_secret = os.environ.get("TW_ACCESS_SECRET")
+#     auth = ty.OAuthHandler(consumer_key, consumer_secret)
+#     auth.set_access_token(access_token, access_token_secret)
+#     stream = ty.Stream(auth, l)
+
+#     stream.filter(track=trends_list)
+
 
 if __name__ == '__main__':
 
@@ -90,13 +115,15 @@ if __name__ == '__main__':
 	l = StdOutListener()
 	stream = ty.Stream(auth, l)
 	stream.filter(track=trends_list)
-	tweets = l.tweets_list
+	tweets = [tweet for tweet in l.tweets_list if (type(tweet) == dict) and ("text" in tweet.keys())]
+    # filtered b/c was getting KeyError returned, presumably because not everything in the list was a dict (?)
 	tweets_df = tweets_to_df(tweets)
 	s3 = boto3.resource("s3", aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 	csv_buffer = StringIO()
 	tweets_df.to_csv(csv_buffer)
 	now = datetime.datetime.now()
 	s3.Object(aws_twitter_bucket, "%s.csv" % now.utcnow().strftime("%y-%m-%d_%H:%M:%S")).put(Body=csv_buffer.getvalue())
+    
     # this seems to work locally; it gives a .csv which is readable for my Shiny app
     # boto3 code adapted from http://stackoverflow.com/questions/38154040/save-dataframe-to-csv-directly-to-s3-python
 
