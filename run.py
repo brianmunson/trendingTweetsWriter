@@ -53,6 +53,7 @@ class StdOutListener(StreamListener):
 
 def stream_and_process_trends():
 	# credentials: twitter, aws
+	# these fields are for running on Heroku
 	consumer_key = os.environ["TW_CONSUMER"]
 	consumer_secret = os.environ["TW_CONSUMER_SECRET"]
 	access_token = os.environ["TW_ACCESS"]
@@ -60,6 +61,7 @@ def stream_and_process_trends():
 	aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
 	aws_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
 	aws_twitter_bucket = os.environ["AWS_TWITTER_BUCKET"]
+	# these fields are for local testing (it didn't run on Heroku without using the above credentialing)
 	# load_dotenv(find_dotenv())
 	# consumer_key = os.environ.get("TW_CONSUMER")
 	# consumer_secret = os.environ.get("TW_CONSUMER_SECRET")
