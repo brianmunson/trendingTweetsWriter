@@ -53,14 +53,21 @@ class StdOutListener(StreamListener):
 
 def stream_and_process_trends():
 	# credentials: twitter, aws
-	load_dotenv(find_dotenv())
-	consumer_key = os.environ.get("TW_CONSUMER")
-	consumer_secret = os.environ.get("TW_CONSUMER_SECRET")
-	access_token = os.environ.get("TW_ACCESS")
-	access_token_secret = os.environ.get("TW_ACCESS_SECRET")
-	aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
-	aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
-	aws_twitter_bucket = os.environ.get("AWS_TWITTER_BUCKET")
+	consumer_key = os.environ["TW_CONSUMER"]
+	consumer_secret = os.environ["TW_CONSUMER_SECRET"]
+	access_token = os.environ["TW_ACCESS"]
+	access_token_secret = os.environ["TW_ACCESS_SECRET"]
+	aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
+	aws_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
+	aws_twitter_bucket = os.environ["AWS_TWITTER_BUCKET"]
+	# load_dotenv(find_dotenv())
+	# consumer_key = os.environ.get("TW_CONSUMER")
+	# consumer_secret = os.environ.get("TW_CONSUMER_SECRET")
+	# access_token = os.environ.get("TW_ACCESS")
+	# access_token_secret = os.environ.get("TW_ACCESS_SECRET")
+	# aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
+	# aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+	# aws_twitter_bucket = os.environ.get("AWS_TWITTER_BUCKET")
 	auth = ty.OAuthHandler(consumer_key, consumer_secret)
 	auth.set_access_token(access_token, access_token_secret)
 	s3 = boto3.resource("s3", aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
