@@ -3,6 +3,10 @@
 # run.py
 # contents of stream_process_tweets.py (see script for more details)
 # attempting to consolidate to make part of scheduled process for heroku app
+# see https://bigishdata.com/2016/12/15/running-python-background-jobs-with-heroku/
+# for how to run locally
+# see https://github.com/yuvadm/heroku-periodical
+# for (perhaps) another solution using Celery
 
 
 import tweepy as ty
@@ -65,13 +69,14 @@ def stream_and_process_trends():
 	available = api.trends_available()
 	trends = api.trends_place(23424977)
 	trends_list = [item["name"] for item in trends[0]["trends"]]
-	# create listener and stream trends
+	# create listener and stream trends, filter results into list to avoid Key Error
 	l = StdOutListener()
 	stream = ty.Stream(auth, l)
 	stream.filter(track=trends_list)
+	tweets = [tweet for tweet in l.tweets_list if (type(tweet) == dict) and ("text" in tweet.keys())]
 	# write create dataframe of tweets
 	tweets_df = pd.DataFrame([[item["text"], item["user"]["id_str"], item["user"]["screen_name"], item["user"]["statuses_count"],
-	item["user"]["followers_count"], item["user"]["favourites_count"], item["user"]["friends_count"]] for item in tweets_list], 
+	item["user"]["followers_count"], item["user"]["favourites_count"], item["user"]["friends_count"]] for item in tweets], 
 	columns = ["text", "id_str", "screen_name", "statuses_count", "followers_count", "favourites_count", "friends_count"])
 	# write tweets datafram to a file on s3 bucket, file named for UTC datetime it was created
 	csv_buffer = StringIO()
